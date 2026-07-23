@@ -1,0 +1,64 @@
+schema_version: 1
+
+repository:
+  name: pjguti/.github
+  base_branch: main
+  merge_method: squash
+
+policy_source:
+  repository: pjguti/github-operating-system
+  commit: 0d925928de158aeb0bbd26f03920fe6fca2ac7e6
+  profile_path: profiles/account-community-health.yml
+  profile_version: 1.0.0
+  schema_path: schemas/repository-governance.schema.json
+  schema_version: 1
+
+policies:
+  required:
+    - core.safe-github-operation@1.0.0
+    - core.audit-traceability@1.0.0
+    - community.global-templates-are-non-executable@1.0.0
+
+repository_specific:
+  public_content_only: true
+  no_secrets_or_private_operational_details: true
+  defaults_do_not_override_repository_specific_files: true
+  templates_do_not_enable_ci_permissions_or_automation: true
+  exact_head_validation_required: true
+  empty_statuses_are_not_success: true
+  queued_or_in_progress_are_not_success: true
+  pre_merge_revalidation_required: true
+  expected_head_sha_required: true
+  repository_specific_authorization_required: true
+  global_templates_cannot_authorize_production_or_external_effects: true
+  github_actions:
+    inspect_exact_head: true
+    queued_is_success: false
+    in_progress_is_success: false
+    failed_blocks_merge: true
+    no_runs_means_none_applicable: false
+  pre_merge_revalidation:
+    require_open: true
+    require_not_draft: true
+    require_mergeable: true
+    require_unchanged_head: true
+
+authorization:
+  mode: repository_specific
+  autonomous_safe_development: false
+  production_operations: false
+  external_effects: false
+  cost_actions: false
+
+exceptions:
+  - id: governance-bootstrap-declaration
+    scope: this-manifest-only
+    reason: Initial governance declaration is documentary and does not enable CI, permissions, protections, deployments or automations.
+    checks_absence_is_success: false
+
+governance_state:
+  declared: true
+  applied: false
+  verified: false
+  verified_commit: null
+  verified_at: null
