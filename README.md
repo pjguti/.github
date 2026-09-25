@@ -17,3 +17,10 @@ Principios públicos aplicables:
 - exigir alta y autorización específica por repositorio.
 
 Estas plantillas no activan CI, protecciones, permisos ni automatizaciones por sí mismas.
+
+
+## Política de operación remota
+
+La política transversal está en [REMOTE_OPERATIONS_POLICY.md](REMOTE_OPERATIONS_POLICY.md).
+
+La arquitectura preferida es GitHub/API + self-hosted runners + workflows acotados y auditables. Desktop Commander queda fuera del camino ordinario y entra en hard freeze cuando su cuota consumida alcanza el 90%.
