@@ -34,3 +34,10 @@ No debe copiarse automáticamente el contrato de otro repositorio.
 ## Seguridad
 
 No se deben modificar producción, secretos, protecciones, rulesets, proveedores externos, pagos ni datos reales sin autorización específica y comprobable.
+
+
+## Operación remota y Desktop Commander
+
+Se aplica la política global definida en [REMOTE_OPERATIONS_POLICY.md](REMOTE_OPERATIONS_POLICY.md).
+
+Desktop Commander no es una herramienta operativa ordinaria. Con consumo de cuota igual o superior al 90%, queda congelado salvo emergencia crítica, ausencia demostrada de alternativa y autorización explícita del operador en ese momento.
