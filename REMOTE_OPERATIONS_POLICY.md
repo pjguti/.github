@@ -1,6 +1,6 @@
 # Política global de operación remota y Desktop Commander
 
-Vigencia: 2026-09-25  
+Vigencia: 2026-10-02  
 Ámbito: repositorios y proyectos de la cuenta GitHub `pjguti`.
 
 ## Regla principal
@@ -18,7 +18,26 @@ El orden obligatorio para trabajo remoto es:
 
 ## Presupuesto de Desktop Commander
 
-Desktop Commander se trata como un recurso escaso.
+Desktop Commander se trata como un recurso escaso y con presupuesto mensual finito.
+
+- objetivo ordinario por bloque de trabajo: `0-2` llamadas;
+- más de `2` llamadas en un mismo bloque requiere una razón técnica concreta y ausencia de alternativa mejor;
+- no usar Desktop Commander para polling de GitHub, lectura repetida de stdout/stderr, búsquedas de repositorio, ramas, PRs, issues, logs o estados que el conector GitHub pueda resolver;
+- no usar `gh` a través de Desktop Commander cuando la misma acción esté disponible mediante GitHub connector/API;
+- agrupar en una sola llamada remota las operaciones locales que sean realmente inseparables y seguras, evitando secuencias `start_process -> read_process_output -> read_process_output` por conveniencia;
+- reutilizar un checkout temporal limpio cuando sea imprescindible trabajo local, evitando clones repetidos;
+- `list_sessions`, `list_processes`, diagnósticos de runner y lecturas de `_diag` sólo se justifican ante un bloqueo real demostrado.
+
+### Control de velocidad de consumo
+
+No basta con vigilar el porcentaje mensual acumulado; también debe vigilarse la velocidad de consumo.
+
+- referencia sostenible para una cuota mensual uniforme: aproximadamente `3.3%` del total por día;
+- si el consumo observado supera `5%` en 24 horas o `10%` en 48 horas, activar **modo conservación** inmediatamente;
+- en modo conservación, Desktop Commander queda restringido a operaciones sin alternativa GitHub/API/self-hosted/conector y debe preferirse una llamada única y acotada;
+- un consumo de alrededor de `13%` en unas `36 horas` se considera evidencia de sobreuso y obliga a revisar el patrón operativo antes de continuar con uso rutinario.
+
+Umbrales acumulados:
 
 - consumo < 80%: no autoriza uso rutinario; sigue siendo contingencia;
 - consumo >= 80%: evitar cualquier uso salvo bootstrap o diagnóstico sin alternativa;
@@ -49,7 +68,7 @@ Un uso excepcional debe cumplir simultáneamente:
 - no existe alternativa GitHub/API/self-hosted/conector;
 - llamada mínima y acotada;
 - sin exposición de secretos;
-- autorización explícita del operador en el turno actual;
+- autorización explícita del operador en el turno actual cuando la política vigente lo requiera;
 - evidencia posterior trasladada al sistema autoritativo del proyecto.
 
 ## Arquitectura preferida
@@ -82,3 +101,9 @@ Un proyecto deja de depender de Desktop Commander cuando sus operaciones rutinar
 - recuperarse o pedir una acción manual mínima cuando falta capacidad física.
 
 Hasta entonces, cualquier dependencia de Desktop Commander debe registrarse como deuda operativa, no como arquitectura permanente.
+
+## Aplicación transversal / System Control
+
+Esta política es de aplicación transversal a todos los proyectos y repositorios bajo la cuenta `pjguti` que utilicen ChatGPT, GitHub, runners o herramientas remotas.
+
+System Control debe tratar estas reglas como baseline operativo y propagarlas a nuevos proyectos, handoffs, bootstrap docs y auditorías cuando exista uso de herramientas remotas. Si un proyecto define reglas locales menos estrictas, prevalece esta política global salvo excepción explícita y documentada del operador.
