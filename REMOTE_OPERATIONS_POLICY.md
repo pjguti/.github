@@ -1,11 +1,13 @@
 # Política global de operación remota y Desktop Commander
 
-Vigencia: 2026-10-02  
+Vigencia original: 2026-10-02; excepción documental revisada: 2026-10-19  
 Ámbito: repositorios y proyectos de la cuenta GitHub `pjguti`.
 
-## Regla principal
+## Regla principal y precedencia (2026-10-19)
 
-Desktop Commander no forma parte del camino operativo ordinario.
+**Dos alcances, sin permisos implícitos:** la excepción documental QNAP descrita al final de esta política prevalece sobre los límites de cuota, hard freeze, contingencia y último recurso **únicamente** para lectura, creación sin sobrescritura, verificación y limpieza de temporales de documentos QNAP previamente autorizados por proyecto, ruta y operación, mientras conste activa la suscripción ilimitada declarada. Esta excepción se aplica a proyectos autorizados de cualquier ámbito, no solamente Docencia. Para el resto de operaciones siguen vigentes las restricciones generales y los controles de autoridad, identidad y secretos sin excepción.
+
+Desktop Commander no forma parte del camino operativo ordinario **fuera de esa excepción documental**.
 
 El orden obligatorio para trabajo remoto es:
 
@@ -18,7 +20,7 @@ El orden obligatorio para trabajo remoto es:
 
 ## Presupuesto de Desktop Commander
 
-Desktop Commander se trata como un recurso escaso y con presupuesto mensual finito.
+**Régimen histórico y general no documental:** los umbrales numéricos siguientes proceden de la cuota finita anterior y **no describen la suscripción ilimitada actual ni son aplicables a la excepción documental QNAP autorizada**. Para otras operaciones siguen rigiendo la prioridad GitHub/API y los límites restrictivos de autoridad; no se presupone una nueva cuota numérica actual.
 
 - objetivo ordinario por bloque de trabajo: `0-2` llamadas;
 - más de `2` llamadas en un mismo bloque requiere una razón técnica concreta y ausencia de alternativa mejor;
@@ -30,7 +32,7 @@ Desktop Commander se trata como un recurso escaso y con presupuesto mensual fini
 
 ### Control de velocidad de consumo
 
-No basta con vigilar el porcentaje mensual acumulado; también debe vigilarse la velocidad de consumo.
+Estos indicadores históricos de consumo solo son pertinentes si vuelve a existir una cuota finita aplicable al uso no documental. No justifican denegar una operación documental QNAP previamente autorizada bajo la suscripción ilimitada activa.
 
 - referencia sostenible para una cuota mensual uniforme: aproximadamente `3.3%` del total por día;
 - si el consumo observado supera `5%` en 24 horas o `10%` en 48 horas, activar **modo conservación** inmediatamente;
