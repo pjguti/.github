@@ -107,3 +107,11 @@ Hasta entonces, cualquier dependencia de Desktop Commander debe registrarse como
 Esta política es de aplicación transversal a todos los proyectos y repositorios bajo la cuenta `pjguti` que utilicen ChatGPT, GitHub, runners o herramientas remotas.
 
 System Control debe tratar estas reglas como baseline operativo y propagarlas a nuevos proyectos, handoffs, bootstrap docs y auditorías cuando exista uso de herramientas remotas. Si un proyecto define reglas locales menos estrictas, prevalece esta política global salvo excepción explícita y documentada del operador.
+
+## Excepción temporal: E/S documental QNAP autorizada (2026-10-19)
+
+El usuario confirma una **suscripción mensual vigente con cuota ilimitada de Desktop Commander**. Mientras esté activa, Desktop Commander queda permitido como canal **ordinario exclusivamente para lectura, creación sin sobrescritura, verificación y limpieza de temporales documentales autorizados** entre ChatGPT, BMAX-PJ o DESKTOP-LDFAIO9 y QNAP. Las referencias anteriores al presupuesto finito, a los límites de llamadas y al hard freeze **no aplican a esta excepción documental específica** mientras dicha condición contractual se mantenga; sí siguen aplicando a las demás operaciones remotas.
+
+Esta excepción **no concede acceso automático** a proyectos, usuarios, rutas, documentos ni operaciones: requiere autorización del proyecto, alcance y destino, identidad de mínimo privilegio, protección contra sobrescrituras, comprobación de integridad y evidencia auditable. No se introducen contraseñas o secretos en ChatGPT, repositorios ni logs. Los documentos permanentes permanecen exclusivamente en QNAP; Qsync es personal y queda fuera del gobierno de SYSTEM CONTROL. No autoriza cambios de ACL, administración remota general, despliegues, runners, secretos, cross-account ni una vía de reconciliación adicional.
+
+Conservar la suscripción pagada hasta que una alternativa sin coste adicional demuestre E2E seguro y realmente utilizable desde ChatGPT convencional (lectura, escritura, autorización, trazabilidad, recuperación). Este texto no autoriza cancelar la suscripción, activar servicios ni fusionar PRs. Cualquier cambio operativo estructural se coordina por SYSTEM CONTROL y GOS.
