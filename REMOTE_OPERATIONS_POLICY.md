@@ -1,11 +1,13 @@
 # Política global de operación remota y Desktop Commander
 
-Vigencia: 2026-10-02  
+Vigencia original: 2026-10-02; excepción documental revisada: 2026-10-19  
 Ámbito: repositorios y proyectos de la cuenta GitHub `pjguti`.
 
-## Regla principal
+## Regla principal y precedencia (2026-10-19)
 
-Desktop Commander no forma parte del camino operativo ordinario.
+**Dos alcances, sin permisos implícitos:** la excepción documental QNAP descrita al final de esta política prevalece sobre los límites de cuota, hard freeze, contingencia y último recurso **únicamente** para lectura, creación sin sobrescritura, verificación y limpieza de temporales de documentos QNAP previamente autorizados por proyecto, ruta y operación, mientras conste activa la suscripción ilimitada declarada. Esta excepción se aplica a proyectos autorizados de cualquier ámbito, no solamente Docencia. Para el resto de operaciones siguen vigentes las restricciones generales y los controles de autoridad, identidad y secretos sin excepción.
+
+Desktop Commander no forma parte del camino operativo ordinario **fuera de esa excepción documental**.
 
 El orden obligatorio para trabajo remoto es:
 
@@ -18,7 +20,7 @@ El orden obligatorio para trabajo remoto es:
 
 ## Presupuesto de Desktop Commander
 
-Desktop Commander se trata como un recurso escaso y con presupuesto mensual finito.
+**Régimen histórico y general no documental:** los umbrales numéricos siguientes proceden de la cuota finita anterior y **no describen la suscripción ilimitada actual ni son aplicables a la excepción documental QNAP autorizada**. Para otras operaciones siguen rigiendo la prioridad GitHub/API y los límites restrictivos de autoridad; no se presupone una nueva cuota numérica actual.
 
 - objetivo ordinario por bloque de trabajo: `0-2` llamadas;
 - más de `2` llamadas en un mismo bloque requiere una razón técnica concreta y ausencia de alternativa mejor;
@@ -30,7 +32,7 @@ Desktop Commander se trata como un recurso escaso y con presupuesto mensual fini
 
 ### Control de velocidad de consumo
 
-No basta con vigilar el porcentaje mensual acumulado; también debe vigilarse la velocidad de consumo.
+Estos indicadores históricos de consumo solo son pertinentes si vuelve a existir una cuota finita aplicable al uso no documental. No justifican denegar una operación documental QNAP previamente autorizada bajo la suscripción ilimitada activa.
 
 - referencia sostenible para una cuota mensual uniforme: aproximadamente `3.3%` del total por día;
 - si el consumo observado supera `5%` en 24 horas o `10%` en 48 horas, activar **modo conservación** inmediatamente;
@@ -107,3 +109,13 @@ Hasta entonces, cualquier dependencia de Desktop Commander debe registrarse como
 Esta política es de aplicación transversal a todos los proyectos y repositorios bajo la cuenta `pjguti` que utilicen ChatGPT, GitHub, runners o herramientas remotas.
 
 System Control debe tratar estas reglas como baseline operativo y propagarlas a nuevos proyectos, handoffs, bootstrap docs y auditorías cuando exista uso de herramientas remotas. Si un proyecto define reglas locales menos estrictas, prevalece esta política global salvo excepción explícita y documentada del operador.
+
+## Excepción temporal: E/S documental QNAP autorizada (2026-10-19)
+
+**Precedencia limitada:** esta excepción prevalece únicamente sobre las reglas generales de contingencia, cuota y hard freeze cuando se trate de E/S documental QNAP ya autorizada. No prevalece sobre controles de identidad, permisos por proyecto, clasificación, acceso a rutas, seguridad ni aprobación de mutaciones estructurales. La mera existencia de esta excepción no concede grants ni autoriza leer o escribir un documento concreto.
+
+El usuario confirma una **suscripción mensual vigente con cuota ilimitada de Desktop Commander**. Mientras esté activa, Desktop Commander queda permitido como canal **ordinario exclusivamente para lectura, creación sin sobrescritura, verificación y limpieza de temporales documentales autorizados** entre ChatGPT, BMAX-PJ o DESKTOP-LDFAIO9 y QNAP. Las referencias anteriores al presupuesto finito, a los límites de llamadas y al hard freeze **no aplican a esta excepción documental específica** mientras dicha condición contractual se mantenga; sí siguen aplicando a las demás operaciones remotas.
+
+Esta excepción **no concede acceso automático** a proyectos, usuarios, rutas, documentos ni operaciones: requiere autorización del proyecto, alcance y destino, identidad de mínimo privilegio, protección contra sobrescrituras, comprobación de integridad y evidencia auditable. No se introducen contraseñas o secretos en ChatGPT, repositorios ni logs. Los documentos permanentes permanecen exclusivamente en QNAP; Qsync es personal y queda fuera del gobierno de SYSTEM CONTROL. No autoriza cambios de ACL, administración remota general, despliegues, runners, secretos, cross-account ni una vía de reconciliación adicional.
+
+Conservar la suscripción pagada hasta que una alternativa sin coste adicional demuestre E2E seguro y realmente utilizable desde ChatGPT convencional (lectura, escritura, autorización, trazabilidad, recuperación). Este texto no autoriza cancelar la suscripción, activar servicios ni fusionar PRs. Cualquier cambio operativo estructural se coordina por SYSTEM CONTROL y GOS.
