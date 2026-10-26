@@ -1,109 +1,53 @@
 # Política global de operación remota y Desktop Commander
 
-Vigencia: 2026-10-02  
-Ámbito: repositorios y proyectos de la cuenta GitHub `pjguti`.
+**Vigencia:** desde su eventual aprobación y merge coordinados; el contenido de una PR Draft no modifica la política efectiva.
 
-## Regla principal
+Ámbito: proyectos y repositorios de la cuenta `pjguti` sujetos a esta política global.
 
-Desktop Commander no forma parte del camino operativo ordinario.
+## Principio de autoridad
 
-El orden obligatorio para trabajo remoto es:
+Desktop Commander es un canal de acceso técnico, no un propietario operativo, reconciliador ni fuente de verdad. La fuente de verdad de infraestructura compartida es `pjguti/github-operating-system` y las decisiones transversales se coordinan desde SYSTEM CONTROL.
 
-1. GitHub connector / GitHub API.
-2. GitHub Actions sobre self-hosted runners ya autorizados.
-3. Workflows acotados, reproducibles y auditables disparados desde GitHub.
-4. APIs o conectores específicos del servicio.
-5. Acción manual local mínima cuando una operación física no pueda automatizarse de forma segura.
-6. Desktop Commander únicamente como contingencia de último recurso.
+El acceso efectivo a una máquina no concede permisos sobre todas sus cuentas, carpetas, proyectos, servicios o datos. Cualquier acción debe corresponder a una necesidad autorizada, un host identificado y un alcance mínimo.
 
-## Presupuesto de Desktop Commander
+## Modalidad ordinaria: observación controlada
 
-Desktop Commander se trata como un recurso escaso y con presupuesto mensual finito.
+Se permite Desktop Commander para diagnósticos rutinarios **de solo lectura** sobre recursos expresamente autorizados: estado de servicios y procesos, salud de runners, conectividad, inventario acotado y lectura mínima de logs pertinentes. Las comprobaciones deben minimizar volumen, repetición y exposición de datos.
 
-- objetivo ordinario por bloque de trabajo: `0-2` llamadas;
-- más de `2` llamadas en un mismo bloque requiere una razón técnica concreta y ausencia de alternativa mejor;
-- no usar Desktop Commander para polling de GitHub, lectura repetida de stdout/stderr, búsquedas de repositorio, ramas, PRs, issues, logs o estados que el conector GitHub pueda resolver;
-- no usar `gh` a través de Desktop Commander cuando la misma acción esté disponible mediante GitHub connector/API;
-- agrupar en una sola llamada remota las operaciones locales que sean realmente inseparables y seguras, evitando secuencias `start_process -> read_process_output -> read_process_output` por conveniencia;
-- reutilizar un checkout temporal limpio cuando sea imprescindible trabajo local, evitando clones repetidos;
-- `list_sessions`, `list_processes`, diagnósticos de runner y lecturas de `_diag` sólo se justifican ante un bloqueo real demostrado.
+GitHub Connector/API y los conectores específicos siguen siendo preferentes cuando ofrecen la misma evidencia completa de forma más directa; Desktop Commander puede aportar observación independiente del propio runner o de una máquina local cuando GitHub no puede hacerlo.
 
-### Control de velocidad de consumo
+La cuota ilimitada comunicada por el operador el 26 de octubre de 2026 sustituye al presupuesto finito histórico. No se aplica el umbral de bloqueo del 90 %, ni límites porcentuales diarios o por número de llamadas, mientras esa condición permanezca vigente. No se interpreta como garantía contractual del proveedor ni como autorización ilimitada de operaciones.
 
-No basta con vigilar el porcentaje mensual acumulado; también debe vigilarse la velocidad de consumo.
+## Mutaciones: autorización separada
 
-- referencia sostenible para una cuota mensual uniforme: aproximadamente `3.3%` del total por día;
-- si el consumo observado supera `5%` en 24 horas o `10%` en 48 horas, activar **modo conservación** inmediatamente;
-- en modo conservación, Desktop Commander queda restringido a operaciones sin alternativa GitHub/API/self-hosted/conector y debe preferirse una llamada única y acotada;
-- un consumo de alrededor de `13%` en unas `36 horas` se considera evidencia de sobreuso y obliga a revisar el patrón operativo antes de continuar con uso rutinario.
+Lectura no autoriza escritura. Reiniciar servicios, ejecutar instalaciones, modificar archivos, permisos, red, credenciales o configuración, registrar runners, borrar datos o desplegar componentes requiere autorización explícita para la operación concreta y todos los gates del control plane.
 
-Umbrales acumulados:
+La ejecución remota de una mutación debe utilizar **el canal aprobado para esa intervención**. La disponibilidad de Desktop Commander no habilita por sí misma un shell genérico ni sustituye el operador o ejecutor prescrito por el procedimiento vigente.
 
-- consumo < 80%: no autoriza uso rutinario; sigue siendo contingencia;
-- consumo >= 80%: evitar cualquier uso salvo bootstrap o diagnóstico sin alternativa;
-- consumo >= 90%: **hard freeze**;
-- durante hard freeze, no se permite ninguna llamada salvo emergencia crítica, ausencia demostrada de alternativa y autorización explícita del operador en ese momento.
+Las operaciones sobre documentos privados exigen, además, el grant específico por proyecto, usuario, ruta, finalidad y modalidad (lectura, creación, sobrescritura, borrado). Se aplican límites de divulgación, integridad, auditoría y retención. Ninguna regla general de observación concede acceso implícito a QNAP o a documentos privados.
 
-El hecho de que Desktop Commander esté disponible técnicamente no constituye autorización de uso.
+## Arquitectura y preferencia operativa
 
-## Prohibiciones durante hard freeze
+1. Usar API o conector específico cuando sea adecuado.
+2. Usar runner y workflows acotados, reproducibles y con SHA exacto para cambios recurrentes autorizados.
+3. Usar Desktop Commander para observación independiente y diagnósticos locales controlados.
+4. Solicitar autorización y canal específico para intervenciones de escritura o recuperación.
 
-No usar Desktop Commander para:
+No añadir watchdogs, schedulers, reconciliadores, reintentos automáticos o writers paralelos. Los proyectos consumidores no administran infraestructura compartida. Si una acción falla, clasificarla antes de repetirla.
 
-- polling de procesos o servicios;
-- leer repetidamente stdout/stderr;
-- comprobar estados que GitHub Actions/API pueda mostrar;
-- explorar archivos o procesos por conveniencia;
-- ejecutar validaciones que puedan correr en self-hosted runners;
-- reiniciar runners para acelerar una cola;
-- mantener sesiones abiertas;
-- sustituir logs/evidencia de GitHub;
-- automatización periódica o recurrente.
+## Seguridad y trazabilidad
 
-## Uso excepcional
+- No recoger ni publicar tokens, contraseñas, contenido documental, rutas privadas completas o datos personales innecesarios.
+- No cruzar límites de cuentas, repositorios, servicios, máquinas ni proyectos por el mero hecho de disponer de acceso técnico.
+- Registrar host, momento, herramienta, alcance, resultado y evidencia redactada cuando una observación fundamente una decisión material.
+- Registrar las mutaciones relevantes en el sistema autoritativo, con comprobación previa, posterior y rollback acotado cuando corresponda.
+- No modificar cuotas, planes, compras ni suscripciones sin autorización financiera separada.
+- Si cambian la cuota o los términos del servicio, revisar esta política expresamente; no reactivar de forma implícita umbrales históricos.
 
-Un uso excepcional debe cumplir simultáneamente:
+## Relación con propuestas anteriores
 
-- objetivo crítico y concreto;
-- no existe alternativa GitHub/API/self-hosted/conector;
-- llamada mínima y acotada;
-- sin exposición de secretos;
-- autorización explícita del operador en el turno actual cuando la política vigente lo requiera;
-- evidencia posterior trasladada al sistema autoritativo del proyecto.
+Esta política sustituiría el régimen global de *hard freeze* cuando se apruebe. La excepción documental QNAP propuesta en `pjguti/.github#4` y su propuesta correlativa en GOS deberán reconciliarse expresamente antes de cualquier merge para evitar dos reglas contradictorias. Nada de este texto aprueba esas PR, concede grants documentales ni activa servicios.
 
-## Arquitectura preferida
+## Vigencia y gobierno
 
-Los proyectos que necesiten capacidad local o física deben migrar hacia:
-
-- self-hosted runner dedicado con labels específicas;
-- servicio persistente del runner;
-- workflows con vocabulario/acciones allow-listed;
-- SHA exacto;
-- `persist-credentials: false` cuando aplique;
-- dependencias fijadas;
-- evidencia en GitHub Actions;
-- sin shell remoto arbitrario;
-- sin reutilizar runners de otro proyecto si viola aislamiento de cuentas/proyectos.
-
-## Aislamiento
-
-Cada cuenta de ChatGPT trabaja únicamente con los proyectos autorizados en esa cuenta.
-
-No se usa la disponibilidad técnica de otro repositorio, runner, cuenta o máquina como autorización para cruzar límites de proyecto.
-
-## Criterio de cierre
-
-Un proyecto deja de depender de Desktop Commander cuando sus operaciones rutinarias necesarias pueden:
-
-- iniciarse mediante GitHub/API/conector;
-- ejecutarse en infraestructura autorizada;
-- producir evidencia auditable sin Desktop Commander;
-- recuperarse o pedir una acción manual mínima cuando falta capacidad física.
-
-Hasta entonces, cualquier dependencia de Desktop Commander debe registrarse como deuda operativa, no como arquitectura permanente.
-
-## Aplicación transversal / System Control
-
-Esta política es de aplicación transversal a todos los proyectos y repositorios bajo la cuenta `pjguti` que utilicen ChatGPT, GitHub, runners o herramientas remotas.
-
-System Control debe tratar estas reglas como baseline operativo y propagarlas a nuevos proyectos, handoffs, bootstrap docs y auditorías cuando exista uso de herramientas remotas. Si un proyecto define reglas locales menos estrictas, prevalece esta política global salvo excepción explícita y documentada del operador.
+La entrada en vigor requiere revisión transversal, validación de las pruebas y manifiestos de adopción del control plane, y merge autorizado. Hasta entonces sigue aplicándose la política actualmente fusionada en `main`.
