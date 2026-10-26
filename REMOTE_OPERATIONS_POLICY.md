@@ -44,6 +44,16 @@ No añadir watchdogs, schedulers, reconciliadores, reintentos automáticos o wri
 - No modificar cuotas, planes, compras ni suscripciones sin autorización financiera separada.
 - Si cambian la cuota o los términos del servicio, revisar esta política expresamente; no reactivar de forma implícita umbrales históricos.
 
+## Documentos privados y QNAP: alcance conservado
+
+La modalidad ordinaria de observación controlada **no concede** capacidad operativa de lectura de contenido privado, creación, sobrescritura, borrado ni limpieza documental. La suscripción ilimitada comunicada por el operador no equivale a un grant de datos ni a autorización de escritura.
+
+Para cada operación documental privada en QNAP se requiere una autorización vigente que identifique proyecto, usuario/identidad, ruta o conjunto acotado, finalidad, modalidad exacta y canal aprobado. Las lecturas se limitan al contenido necesario; las creaciones deben evitar sobrescrituras por defecto y verificar integridad. Las sobrescrituras, borrados y limpieza de temporales también son mutaciones y requieren autorización específica, evidencia y reversibilidad cuando corresponda.
+
+No se concede administración general del NAS, modificación de ACL o credenciales, despliegues, uso de Qsync como sistema de gobierno, sincronización permanente fuera de QNAP, acceso interproyecto ni autoridad para nuevos reconciliadores. Los documentos permanentes siguen en su almacenamiento autorizado y se respeta clasificación, retención y minimización de datos.
+
+Esta sección preserva los controles de las propuestas históricas `pjguti/.github#4` y `pjguti/github-operating-system#1263`, pero **no activa** sus excepciones de escritura ni reproduce el régimen obsoleto de hard freeze. Cada mutación seguirá requiriendo una decisión operativa separada.
+
 ## Relación con propuestas anteriores
 
 Esta política sustituiría el régimen global de *hard freeze* cuando se apruebe. La excepción documental QNAP propuesta en `pjguti/.github#4` y su propuesta correlativa en GOS deberán reconciliarse expresamente antes de cualquier merge para evitar dos reglas contradictorias. Nada de este texto aprueba esas PR, concede grants documentales ni activa servicios.
