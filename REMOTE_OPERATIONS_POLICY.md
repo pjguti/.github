@@ -1,6 +1,6 @@
 # Política global de operación remota y Desktop Commander
 
-**Vigencia:** desde su eventual aprobación y merge coordinados; el contenido de una PR Draft no modifica la política efectiva.
+**Vigencia:** política aprobada y fusionada el 26/10/2026 mediante PR #5, tras la promoción coordinada de `pjguti/github-operating-system` PR #1291. Las propuestas futuras no modifican esta política hasta su aprobación y fusión.
 
 Ámbito: proyectos y repositorios de la cuenta `pjguti` sujetos a esta política global.
 
@@ -56,8 +56,8 @@ Esta sección preserva los controles de las propuestas históricas `pjguti/.gith
 
 ## Relación con propuestas anteriores
 
-Esta política sustituiría el régimen global de *hard freeze* cuando se apruebe. La excepción documental QNAP propuesta en `pjguti/.github#4` y su propuesta correlativa en GOS deberán reconciliarse expresamente antes de cualquier merge para evitar dos reglas contradictorias. Nada de este texto aprueba esas PR, concede grants documentales ni activa servicios.
+Esta política sustituyó el régimen global de *hard freeze* mediante la promoción coordinada del 26/10/2026. La propuesta histórica de excepción documental QNAP `pjguti/.github#4` quedó cerrada sin fusionarse ni activarse; las salvaguardas de lectura privada y mutaciones documentales permanecen en esta política. Ninguna de estas referencias concede grants documentales, activa servicios o autoriza escrituras.
 
 ## Vigencia y gobierno
 
-La entrada en vigor requiere revisión transversal, validación de las pruebas y manifiestos de adopción del control plane, y merge autorizado. Hasta entonces sigue aplicándose la política actualmente fusionada en `main`.
+La aprobación y adopción inicial constan en `pjguti/github-operating-system` PR #1291 y `pjguti/.github` PR #5, ambas fusionadas el 26/10/2026. Las modificaciones posteriores requieren su propio procedimiento de revisión, validación, aprobación y fusión; ninguna propuesta futura tendrá vigencia automática.
