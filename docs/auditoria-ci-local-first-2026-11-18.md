@@ -19,3 +19,27 @@ Inspección de árboles de workflow en las ramas por defecto de `pjguti/github-o
 5. No cambiar triggers, secrets, permisos, runners, CI requerido, branch protection o producción sin evaluación específica.
 
 Política transversal: [GitHub-hosted local-first](../docs/politica-github-hosted-local-first.md). Issues: GOS #1613, IA Core #351, PJ QuantStrategist #1990.
+
+## Ampliación de auditoría (solo lectura, 2026-11-18)
+
+La inspección de los árboles confirma 83 workflows en GOS y 70 en PJ_QuantStrategist; **no se han clasificado aún todos**. Muestreo con lectura directa del YAML:
+
+| Repo | Workflow | Runner declarado | Disparador observado |
+|---|---|---|---|
+| GOS | control-plane-hosted-emergency.yml | ubuntu-24.04-arm y windows-2025 | workflow_dispatch |
+| GOS | control-plane-validation.yml | 3 jobs self-hosted Windows | pull_request |
+| GOS | consumer-superior-policy-guard.yml | self-hosted Windows | workflow_call |
+| GOS | build-qnap-remote-mcp-image.yml | ubuntu-latest | workflow_dispatch |
+| GOS | 0668-qnap-materialization.yml | self-hosted Windows | push |
+| GOS | 0668-qnap-overlay.yml | self-hosted Windows | push |
+| GOS | bootstrap-validation-review.yml | self-hosted Windows | workflow_dispatch |
+| GOS | cloudflare-runner-recovery-queue-consumer-bootstrap.yml | self-hosted Windows | workflow_dispatch |
+| GOS | cloudflare-runner-recovery-runtime-activate.yml | self-hosted Windows | workflow_dispatch |
+| GOS | cloudflare-runner-recovery-storage-bootstrap.yml | self-hosted Windows | workflow_dispatch |
+| GOS | cloudflare-runner-recovery-worker-bootstrap.yml | self-hosted Windows | workflow_dispatch |
+| PJ_QuantStrategist | a1-advanced-strategy-real-data.yml | self-hosted Windows pjq-main | pull_request, workflow_dispatch |
+| PJ_QuantStrategist | a10-blind-holdout-evaluation.yml | self-hosted Windows pjq-main | pull_request, workflow_dispatch |
+
+**Hallazgos:** los jobs GitHub-hosted identificados en GOS son manuales, pero siguen consumiendo cuota si se lanzan. Existen controles de PR sobre self-hosted, sin que esto autorice su activación ni pruebe su seguridad operacional. Los eventos YAML observados no equivalen a una evaluación completa de triggers ni a un cálculo de minutos.
+
+**Prioridad siguiente:** clasificar el resto de los 153 workflows por runner y trigger, comprobar paths/concurrency, y documentar alternativas de ejecución offline. Evitar reintentos de API masivos que fallen por timeout. No despachar Actions.
