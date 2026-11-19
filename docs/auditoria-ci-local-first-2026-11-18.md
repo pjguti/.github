@@ -43,3 +43,28 @@ La inspección de los árboles confirma 83 workflows en GOS y 70 en PJ_QuantStra
 **Hallazgos:** los jobs GitHub-hosted identificados en GOS son manuales, pero siguen consumiendo cuota si se lanzan. Existen controles de PR sobre self-hosted, sin que esto autorice su activación ni pruebe su seguridad operacional. Los eventos YAML observados no equivalen a una evaluación completa de triggers ni a un cálculo de minutos.
 
 **Prioridad siguiente:** clasificar el resto de los 153 workflows por runner y trigger, comprobar paths/concurrency, y documentar alternativas de ejecución offline. Evitar reintentos de API masivos que fallen por timeout. No despachar Actions.
+
+## Inventario completo estático — 2026-11-19
+
+Se han clonado en BMAX-PJ **copias temporales parciales** (solo `.github/workflows`) de las ramas por defecto. Commits auditados: GOS `4e92603` (83 YAML) y PJ_QuantStrategist `2b98dab` (70 YAML). No se han lanzado Actions ni modificado los repositorios de origen.
+
+| Repositorio | YAML | Archivos con hosted | Archivos con self-hosted | Jobs hosted declarados | Jobs self-hosted declarados |
+|---|---:|---:|---:|---:|---:|
+| GOS | 83 | 47 | 36 | 48 | 49 |
+| PJ_QuantStrategist | 70 | 5 | 64 | 7 | 66 |
+
+Clasificación mediante búsqueda textual de `runs-on:` en líneas YAML: los números son un inventario estático y **no** estiman minutos facturados ni equivalen a validación semántica completa. En QuantStrategist hay un archivo sin `runs-on` simple. Un archivo puede contener varios jobs.
+
+### Hallazgo de prioridad alta: GOS Document Broker
+
+De los 47 workflows GOS que declaran hosted, **38 tienen triggers automáticos**: 28 `pull_request` y 10 `pull_request` + `push`; todos los 38 son `document-broker-*-validation.yml` y declaran filtros `paths:`. Ninguno de estos 38 declara `cancel-in-progress: true` (inspección textual). Otros 5 hosted declaran `workflow_dispatch`, 1 `workflow_call` y 3 no coincidieron con los triggers sencillos inspeccionados (requieren lectura semántica adicional).
+
+En PJ_QuantStrategist, los **5 workflows hosted** detectados declaran `workflow_dispatch`; no se identificaron hosted automáticos en esta revisión textual.
+
+### Plan seguro sin alterar controles
+
+1. Obtener estadísticas históricas **solo lectura** de minutos por workflow/job cuando estén disponibles; no inferir el consumo de los conteos de archivos.
+2. Diseñar cambios en Draft PRs independientes para Document Broker: `concurrency` por PR/ref y `cancel-in-progress` cuando sea seguro; evaluar `paths` existentes y evitar doble PR/push sin perder validaciones obligatorias.
+3. Clasificar cada validación según si es reproducible offline en BMAX o requiere Linux, servicios, secretos o atestación. No migrar automáticamente un gate de confianza a un runner propio.
+4. Evaluar primero efectos sobre branch protection, required checks, PRs de forks, permisos y cancelación de jobs con efectos secundarios.
+5. No cambiar ni ejecutar workflows de producción, CAS, lease, ARM64 o GitHub-hosted sin autorización específica.
