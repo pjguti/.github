@@ -185,3 +185,24 @@ Autorización recibida **solo para estudiar y preparar procedimiento**, no para 
 **Secuencia propuesta, no ejecutada:** 1) revisión de capacidad/cola, mutaciones estructurales activas, dependencias y estado actual de main; 2) definir identidad y autorización formal específica SYSTEM_CONTROL con exact paths y SHAs, verificar si la política exige ref `system-control/`; 3) revisar habilitación de un writer autorizado y transporte CAS condicionado por blob SHA, con readback y sin reintentos ambiguos; 4) adquirir estado `admitted` solo bajo autorización posterior, exact binding y reobservación fresca; 5) validar sin ignorar cuota hosted, evaluar checks y liberar exact binding al terminar. **No realizar pasos 3-5 automáticamente.**
 
 **Estado:** revisión preparada, singleton intacto; no dispatch, no merge, no bypass. La PR #1616 debe permanecer en borrador hasta resolución formal.
+
+## Propuesta de adaptación del procedimiento de admisión — PR GOS #1616 (solo diseño; 2026-11-19)
+
+**Mandato:** preparar propuesta, no implementar, activar ni escribir CAS. Relectura directa de contrato `governance/control-plane-mutation-admission.yml`, clasificador `tools/classify_control_plane_validation_scope.py` y candidato de writer `tools/control_plane_singleton_cas_executor.py` en GOS. El contrato establece `SYSTEM_CONTROL` como autoridad, serialización (máximo 1), evidencia fresca de main/colas/capacidad/dependencias, vinculación exacta y fallo cerrado. El clasificador acepta cualquier `head_ref` que coincida exactamente con el singleton; la función `prepare_offline` del candidato writer exige específicamente prefijo `system-control/`. Esta diferencia es **entre capas**: no implica que renombrar la rama sea suficiente para autorizar CAS. Writer genérico `ENABLED=False`, sin cliente de red ni permiso genérico.
+
+### Decisión de diseño propuesta
+
+**Preferencia: mantener PR #1616 en `audit/...` y estudiar un adaptador de preparación de identidad con política de refs explícita**, sin relajar el validador de admisión, sin activar writer genérico y sin introducir nuevos ejecutores con permisos de escritura. Alternativa más conservadora: generar un nuevo candidato `system-control/...` desde base observada, pero requeriría nuevo head SHA, nueva PR/identidad o sustitución gobernada y nueva autorización exacta; **no hacerlo automáticamente**. Opción descartada: editar el singleton a mano, reusar canales one-use históricos, desactivar el clasificador, forzar checks o mover la rama sin admisión.
+
+### Requisitos de la propuesta técnica, antes de cualquier implementación
+
+1. **Separar preparación de ejecución:** función pura `prepare_offline` para identidad arbitraria *solo si* una política allowlist expresa lo admite; la ejecución CAS sigue deshabilitada y requiere autorización operativa específica. Nunca aceptar wildcard indiscriminado o `head_ref` proporcionado sin comprobación.
+2. **Binding y elegibilidad:** `repository`, `base_ref=main`, SHA base actual, SHA head inmutable, ref exacto, parent/tree/diff exactos, 20 rutas permitidas, hash de manifiesto de contenido, responsable, timestamp y evidencia de permiso. Si main o head cambian, abortar y recomenzar autorización; no reusar el binding anterior.
+3. **Preflight de gobierno:** singleton idle, generation/blob SHA actuales, ausencia de otra mutación admitida, colas CPV/reconciliación y capacidad verificada, orden de dependencias y coste GitHub-hosted. Estado desconocido = denegación.
+4. **CAS de un solo uso y readback:** escribir solo mediante canal formal autorizado, compare-and-swap con blob SHA observado, generación +1, comprobación exacta de estado remoto, sin reintento automático tras resultado ambiguo; operación de release vinculada a request/base/ref/head exactos. Sin nueva autoridad de infraestructura.
+5. **Pruebas negativas obligatorias:** ref ajeno, rama no autorizada, SHA head/base alterado, ruta extra, estado admitted, generación/blob obsoletos, CAS ambiguo, fallo de readback, colisión de capacidad, error de parent y liberación de otro owner; todas deben fallar cerrado. Pruebas sintéticas locales, no workflows hosted ni QNAP.
+6. **Validación y promoción:** revisión de seguridad SYSTEM_CONTROL, revisión de gobernanza y pruebas de equivalencia; aprobación separada de cualquier modificación de código/contrato, adquisición CAS, ejecución de CI, publicación/rebase y merge. PR #1616 permanece draft hasta evidencia suficiente.
+
+### Alcance expresamente excluido ahora
+
+No cambiar `tools/control_plane_singleton_cas_executor.py`, contrato, singleton, ramas, PR, checks, runners, secretos, CAS ni infraestructura. No lanzar ni reintentar GitHub Actions. La propuesta es un documento de arquitectura; **no es una autorización de activación**.
