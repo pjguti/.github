@@ -137,3 +137,19 @@ Inspección estática de los 38 workflows `document-broker-*-validation.yml` con
 | Con `concurrency` a nivel raíz | **0** |
 
 **Prioridades para propuesta, sin aplicar:** (1) añadir límites de tiempo adecuados y explícitos a los 20 jobs sin timeout, previa evaluación de duración real; (2) evaluar `concurrency`/cancelación de PR obsoletos, sin cancelar tareas de seguridad críticas ni trabajos de `push` que aporten evidencia; (3) agrupar selectivamente instalaciones y ejecuciones redundantes sin perder aislamiento, rutas ni gates; (4) medir coste real por workflow antes de atribuir ahorros. Las 38 rutas filtradas no implican que cada PR dispare los 38. La mera adición de `concurrency` o modificación de YAML podría disparar CI hosted; **no aplicar sin autorización y plan de ventana de cuota**.
+
+## Plan de implementación propuesto, aún NO autorizado — 2026-11-19
+
+**Objetivo:** reducir consumo GitHub-hosted sin degradar los controles de seguridad de Document Broker, ni modificar las rutas de aprobación, los artefactos de evidencia o los workflows de comandos sensibles. Baseline estático: 38 validaciones hosted con filtros `paths`, 20 sin `timeout-minutes`, 0 con `concurrency` raíz; 28 solo PR y 10 PR+push. Baseline de tests local Windows: 518/533; 15 incompatibilidades/semánticas POSIX pendientes de validación Linux por presión RAM host.
+
+**Fase 0 — solo análisis (completada parcialmente):** preservar inventario por nombre, trigger, runner, filtros de rutas, dependencias y test exacto; obtener después tiempos reales de ejecución/cola y minutos facturados, separando fallos por cuota de fallos de código. No estimar ahorro monetario sin métricas.
+
+**Fase 1 — límites de tiempo:** propuesta de PR de alcance acotado para los 20 YAML sin `timeout-minutes`. Elegir límites por datos históricos y pruebas reales, no aplicar indiscriminadamente 5 minutos a pruebas e2e/SQLite. Conservar triggers, filtros, `permissions`, `uses`, secretos, comandos, rutas y nombres de checks. Validación local de parseo YAML, comparación de diffs semánticos y revisión de seguridad; la mera apertura de PR puede disparar CI hosted. **Requiere autorización específica antes de cambiar YAML o abrir PR.**
+
+**Fase 2 — concurrencia:** evaluar por workflow un `concurrency.group` estable con identidad de workflow y PR/ref; `cancel-in-progress` solo para ejecuciones PR reemplazadas, nunca cancelar evidencia obligatoria en `push` ni tareas con efectos externos. Comprobar colisiones entre workflows, forks y reglas de required checks; aprobar por separado.
+
+**Fase 3 — consolidación:** matriz de solapamientos entre test commands, requirements, paths y gates; proponer grupos pequeños conservando trazabilidad y required status checks. Nunca agrupar un gate sensible sin equivalencia demostrada; comparar resultado en Linux y Windows y revisar seguridad antes de migrar.
+
+**Fase 4 — despliegue gradual:** un subconjunto piloto, métricas de coste, tiempo de feedback, falsos verdes y seguridad, rollback explícito y autorización de cuota. No iniciar runners ARM64/QNAP ni usar GitHub-hosted hasta aprobación expresa.
+
+**Bloqueo operativo:** BMAX-PJ ~0.78 GiB RAM libre, VM OpenClaw-Ubuntu en producción y Brave interactivo protegido; no cerrar Brave ni reiniciar WSL/VM. El intento WSL previo falló `CreateVm/ERROR_TIMEOUT`. Continuar con análisis estático y documentos, sin elevar consumo de memoria.
