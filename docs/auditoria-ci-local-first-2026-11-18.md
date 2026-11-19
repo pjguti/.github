@@ -86,3 +86,15 @@ En BMAX-PJ Windows, checkout temporal GOS `4e92603`, se ejecutaron **todos los t
 Tras ampliar **solo** el sparse-checkout con esos directorios, segunda ronda: **496 passed / 37 failed** en 39.66s. Los fallos pendientes incluyen pruebas POSIX de `mount_root`, permisos SQLite de directorios, enlaces simbólicos/listados en Windows, y algunos tests de inventario/publicación/promoción que requieren revisión de fixtures y de su entorno. No se ha modificado el código fuente ni se ha ejecutado GitHub Actions.
 
 **Interpretación:** 496 tests demuestran portabilidad y ejecución local parcial; 37 resultados fallidos **no son automáticamente defectos del producto** ni deben marcarse como aprobados. Separar (a) dependencias incompletas del checkout, (b) semántica Windows/POSIX, (c) posibles fallos reales antes de proponer migración. No debilitar comprobaciones de rutas, ACL, SQLite o enlaces simbólicos. Validación Linux aislada pendiente de autorización de infraestructura si no hay entorno ya disponible y permitido.
+
+## Cierre de diagnóstico Windows y punto de autorización — 2026-11-19
+
+Tercera ejecución de los 63 archivos `tests/test_document_broker_*.py` en checkout parcial temporal GOS `4e92603` tras incorporar `publications/document-broker` y `templates/runners/organizational-document-broker`: **518 passed / 15 failed / 533 total**, pytest 45.57 s. Sin cambios en el código ni en el repositorio remoto.
+
+Los 15 fallos se concentran en:
+- 5 casos de ejecución/documentos durables y límites de solicitud (`mount_root` POSIX absoluto).
+- 4 casos de `source_boundary` (rutas y symlinks bajo Windows).
+- 4 casos de `sqlite_storage_boundary` (semántica de permisos/ACL de directorios).
+- 2 casos de `listing_regression` (filtrado de symlinks bajo Windows).
+
+La enumeración **solo lectura** `wsl.exe --list --quiet` en BMAX-PJ confirmó una distribución **Ubuntu-24.04** registrada. No se ha iniciado ni activado esa distribución. `docker` no aparece disponible como comando. La siguiente validación apropiada es ejecutar el mismo commit y los 533 casos en Ubuntu WSL existente, previa autorización explícita para iniciar/usar la distribución y comprobación de aislamiento/efectos secundarios. No ejecutar Actions, no activar runners ni alterar CAS/leases. El 97,2 % es tasa de tests superados, no cobertura de código.
