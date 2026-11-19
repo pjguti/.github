@@ -78,3 +78,11 @@ Checkout temporal parcial GOS `4e92603`, Python 3.12.10 / pytest 8.4.2 en Window
 3. Con esas fixtures disponibles: **158 passed, 1 failed**, pytest 15.13s, `--maxfail=1`. Fallo en `test_document_broker_durable_document_e2e.py::test_real_synthetic_document_execution_flows_into_durable_delivery_and_ack`: `validate_source_root_binding` exige `mount_root` absoluto POSIX (`startswith('/')`), pero `tmp_path` en Windows produce `C:/...`. No se ha demostrado defecto de seguridad ni equivalencia Linux. Las pruebas restantes no se ejecutaron.
 
 **Decisión:** no relajar `source_boundary.py` para adaptar la prueba. Clasificar los tests por portabilidad y ejecutar las integraciones POSIX en Linux aislado cuando esté disponible y autorizado, sin GitHub-hosted. La cobertura local y la atestación remota son evidencias distintas.
+
+## Matriz de portabilidad offline — ampliación 2026-11-19
+
+En BMAX-PJ Windows, checkout temporal GOS `4e92603`, se ejecutaron **todos los tests de los 63 archivos** `tests/test_document_broker_*.py` con pytest sin `--maxfail` (533 casos reportados). La primera ronda, con checkout parcial incompleto, produjo **457 passed / 76 failed** en 50.30s; el análisis de errores identificó fixtures faltantes bajo `handoffs/`, `reviews/`, `promotions/`, `architecture/` y `tools/windows/`.
+
+Tras ampliar **solo** el sparse-checkout con esos directorios, segunda ronda: **496 passed / 37 failed** en 39.66s. Los fallos pendientes incluyen pruebas POSIX de `mount_root`, permisos SQLite de directorios, enlaces simbólicos/listados en Windows, y algunos tests de inventario/publicación/promoción que requieren revisión de fixtures y de su entorno. No se ha modificado el código fuente ni se ha ejecutado GitHub Actions.
+
+**Interpretación:** 496 tests demuestran portabilidad y ejecución local parcial; 37 resultados fallidos **no son automáticamente defectos del producto** ni deben marcarse como aprobados. Separar (a) dependencias incompletas del checkout, (b) semántica Windows/POSIX, (c) posibles fallos reales antes de proponer migración. No debilitar comprobaciones de rutas, ACL, SQLite o enlaces simbólicos. Validación Linux aislada pendiente de autorización de infraestructura si no hay entorno ya disponible y permitido.
