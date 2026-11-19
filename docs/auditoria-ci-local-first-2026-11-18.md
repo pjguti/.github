@@ -206,3 +206,11 @@ Autorización recibida **solo para estudiar y preparar procedimiento**, no para 
 ### Alcance expresamente excluido ahora
 
 No cambiar `tools/control_plane_singleton_cas_executor.py`, contrato, singleton, ramas, PR, checks, runners, secretos, CAS ni infraestructura. No lanzar ni reintentar GitHub Actions. La propuesta es un documento de arquitectura; **no es una autorización de activación**.
+
+## Contraste read-only del prototipo con PR #1616 — 2026-11-19
+
+Autorización de continuación limitada a análisis y pruebas inertes. `compare_commits` para base `4e92603a5516948c60f387ec6ba37991522dbfef` y head `51e2d8ed0f957cf8855c24ae5da29b54a3baf705`: `ahead_by=1`, 20 rutas reales `.github/workflows/document-broker-*-validation.yml`, cada una `additions=1`, `deletions=0`. Comprobación read-only del checkout temporal: parent del head coincide con base; se calcularon SHA-256 de los 20 archivos de checkout, **sin validar criptográficamente un manifiesto firmado o contrastar todos los blobs contra proveedor**.
+
+Se amplió el experimento aislado con `test_real_pr_manifest.py`, que usa las 20 rutas reales y comprueba rechazo de rutas omitidas, extra, duplicadas, identidad errónea, singleton ocupado/obsoleto y evidencia de capacidad/dependencias desconocida. **10 métodos unittest superados**, con subtests negativos. El test positivo utiliza condiciones de capacidad/cola sintéticas y un SHA-256 de manifiesto ficticio que el prototipo **solo comprueba sintácticamente**, no recalcula. Esto es una **limitación abierta**; no afirmar prueba de integridad de contenido ni disponibilidad operativa. Ningún cambio en GOS, CAS, PR, runner o Actions. El paquete experimental actualizado se conserva como artefacto local fuera del repositorio GOS.
+
+**Pendientes de diseño antes de cualquier integración:** verificación criptográfica del manifiesto contra blobs exactos; observaciones actuales autenticadas de cola, capacidad y dependencias; definición y autorización de política de refs para `audit/`; revisión de permisos/identidad de writer; pruebas negativas de CAS/lectura posterior; admisión exacta y release gobernados. No reusar generaciones ni approvals de pruebas.
