@@ -153,3 +153,11 @@ Inspección estática de los 38 workflows `document-broker-*-validation.yml` con
 **Fase 4 — despliegue gradual:** un subconjunto piloto, métricas de coste, tiempo de feedback, falsos verdes y seguridad, rollback explícito y autorización de cuota. No iniciar runners ARM64/QNAP ni usar GitHub-hosted hasta aprobación expresa.
 
 **Bloqueo operativo:** BMAX-PJ ~0.78 GiB RAM libre, VM OpenClaw-Ubuntu en producción y Brave interactivo protegido; no cerrar Brave ni reiniciar WSL/VM. El intento WSL previo falló `CreateVm/ERROR_TIMEOUT`. Continuar con análisis estático y documentos, sin elevar consumo de memoria.
+
+## Implementación fase 1 preparada localmente — 2026-11-19
+
+Autorización expresa del operador para **crear rama aislada y preparar cambios de timeout** en GOS, excluyendo push, PR, GitHub Actions, merge y activación de runners. En BMAX-PJ, checkout temporal `%TEMP%\\ci-hosted-audit-20261119\\github-operating-system` (base GOS `4e92603a5516948c60f387ec6ba37991522dbfef`), rama local `audit/ci-document-broker-timeouts-20261119`, commit **`51e2d8ed0f957cf8855c24ae5da29b54a3baf705`**.
+
+Diff exacto: **20 workflows**, **20 inserciones**, **0 eliminaciones**; se añadió solo `timeout-minutes: 30` bajo el job `runs-on` de cada YAML hosted Document Broker que no tenía timeout. Comprobaciones locales: `git diff --check` correcto; PyYAML 6.0.2 pudo cargar todos; comparación semántica con `git show HEAD:<file>` antes del commit confirmó que, tras retirar el nuevo campo, todos los demás valores YAML eran idénticos a la versión original. Los archivos `__pycache__` no rastreados preexistentes quedaron fuera del commit.
+
+**Advertencia:** 30 minutos es un **límite provisional conservador, no validado con métricas históricas**. Revisar especialmente e2e, recovery y SQLite antes de producción. Rama y commit **solo locales**, no existen aún en GitHub remoto; **0 ejecuciones hosted**. Próxima decisión: autorizar o no publicación de rama/PR, sabiendo que el push o la PR pueden disparar CI y que la cuota hosted está agotada. Preferible validar duración histórica y acordar estrategia de cuota antes de publicar.
