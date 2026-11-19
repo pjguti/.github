@@ -68,3 +68,13 @@ En PJ_QuantStrategist, los **5 workflows hosted** detectados declaran `workflow_
 3. Clasificar cada validación según si es reproducible offline en BMAX o requiere Linux, servicios, secretos o atestación. No migrar automáticamente un gate de confianza a un runner propio.
 4. Evaluar primero efectos sobre branch protection, required checks, PRs de forks, permisos y cancelación de jobs con efectos secundarios.
 5. No cambiar ni ejecutar workflows de producción, CAS, lease, ARM64 o GitHub-hosted sin autorización específica.
+
+## Ensayo offline BMAX — 2026-11-19
+
+Checkout temporal parcial GOS `4e92603`, Python 3.12.10 / pytest 8.4.2 en Windows. Se añadieron a sparse-checkout únicamente los directorios de tests, herramientas, esquemas, registry, catálogo y políticas necesarios; no se modificó el repositorio original ni se lanzó GitHub Actions.
+
+1. Cinco archivos seleccionados por los workflows `document-broker-credential-provider-validation.yml` y `document-broker-activation-v2-validation.yml`: **40 passed**, pytest 2.58s, tras incluir esquemas JSON requeridos.
+2. Ampliación a 63 archivos `tests/test_document_broker_*.py`: los intentos iniciales fallaron por fixtures ausentes del checkout parcial (`registry/document-broker`, `catalog/document-broker`, `policies/data`); se añadieron sin cambiar código.
+3. Con esas fixtures disponibles: **158 passed, 1 failed**, pytest 15.13s, `--maxfail=1`. Fallo en `test_document_broker_durable_document_e2e.py::test_real_synthetic_document_execution_flows_into_durable_delivery_and_ack`: `validate_source_root_binding` exige `mount_root` absoluto POSIX (`startswith('/')`), pero `tmp_path` en Windows produce `C:/...`. No se ha demostrado defecto de seguridad ni equivalencia Linux. Las pruebas restantes no se ejecutaron.
+
+**Decisión:** no relajar `source_boundary.py` para adaptar la prueba. Clasificar los tests por portabilidad y ejecutar las integraciones POSIX en Linux aislado cuando esté disponible y autorizado, sin GitHub-hosted. La cobertura local y la atestación remota son evidencias distintas.
