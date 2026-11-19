@@ -119,3 +119,21 @@ Inspección estática del checkout temporal GOS `4e92603` y PJ Quant `2b98dab` (
 - PJ Quant `superior-policy-guard.yml`: `push` a main y `pull_request`; job **reutilizable** `uses: pjguti/github-operating-system/.github/workflows/consumer-superior-policy-guard.yml@main`, sin `runs-on` local. Se verificó en GOS que el llamado declara `runs-on: [self-hosted, windows, x64]`. **No es GitHub-hosted directo ni indirecto según el YAML inspeccionado**; depende de disponibilidad de runner self-hosted y del ref mutable `@main`. No eliminar guard de gobernanza.
 
 Conclusión: la prioridad de ahorro de hosted sigue siendo el grupo de 38 `document-broker-*-validation.yml` con triggers PR/push filtrados. Los tres `issue_comment` tienen riesgo operativo y de seguridad distinto. El workflow reusable PJ Quant no debe contabilizarse como hosted por ausencia de `runs-on` en el llamador.
+
+## Controles de coste en 38 validaciones hosted Document Broker — 2026-11-19
+
+Inspección estática de los 38 workflows `document-broker-*-validation.yml` con `runs-on: ubuntu-*` en GOS `4e92603`:
+
+| Indicador | Resultado |
+| --- | ---: |
+| Workflows hosted | 38 |
+| PR + push filtrado por rutas | 10 |
+| Solo PR filtrado por rutas | 28 |
+| Con `paths` | 38 |
+| Con `actions/setup-python` | 38 |
+| Con instalación pip explícita | 38 |
+| Con `timeout-minutes` | 18 |
+| Sin `timeout-minutes` | **20** |
+| Con `concurrency` a nivel raíz | **0** |
+
+**Prioridades para propuesta, sin aplicar:** (1) añadir límites de tiempo adecuados y explícitos a los 20 jobs sin timeout, previa evaluación de duración real; (2) evaluar `concurrency`/cancelación de PR obsoletos, sin cancelar tareas de seguridad críticas ni trabajos de `push` que aporten evidencia; (3) agrupar selectivamente instalaciones y ejecuciones redundantes sin perder aislamiento, rutas ni gates; (4) medir coste real por workflow antes de atribuir ahorros. Las 38 rutas filtradas no implican que cada PR dispare los 38. La mera adición de `concurrency` o modificación de YAML podría disparar CI hosted; **no aplicar sin autorización y plan de ventana de cuota**.
